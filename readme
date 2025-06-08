@@ -1,0 +1,5 @@
+chat service port = 6006
+
+auth service port =5005
+
+every users that created locally have same password
