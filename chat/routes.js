@@ -1,10 +1,10 @@
-const express=require("express")
+ const express=require("express")
 const ChatModel=require("./models")
 const router=express.Router()
 const x=new ChatModel()
-
+const authorization = require("./passport")
 //if chat instance is not present in database
-router.post("/startNewChat",async (req,res)=>{
+router.post("/startNewChat",authorization,async (req,res)=>{
     const newChat=await x.startNewChat(req);
     res.json(newChat);
 })
@@ -16,8 +16,16 @@ router.get("/searchUsers",async (req,res)=>{
     res.json(users);
 })
 
-router.get("/getMyChats",async (req,res)=>{
+router.get("/getMyChats",authorization,async (req,res)=>{
     const chats=await x.myChats(req);
     res.json({message:"My chats",chats:chats})
+})
+router.post("/sendMessage",authorization,async (req,res)=>{
+    const msg=await x.sendMessage(req);
+    res.json({message:'Message sent',data:msg});
+})
+router.get("/getMyMessage",authorization,async (req,res)=>{
+    const data=await x.getMessages(req);
+    res.json({message:"All messages",data:data});
 })
 module.exports=router;
